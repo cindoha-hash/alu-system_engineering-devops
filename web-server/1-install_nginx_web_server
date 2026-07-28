@@ -1,13 +1,26 @@
-#!/bin/bash
-# Script to install and configure nginx web server
+#!/usr/bin/env bash
+# This script installs and configures Nginx web server on a new Ubuntu machine
 
-# Update package list and install nginx with -y flag
+# Update package lists
 sudo apt-get update -y
+
+# Install Nginx web server (includes -y to auto-confirm)
 sudo apt-get install -y nginx
 
-# Create the HTML content with "Holberton School"
+# Ensure Nginx is running
+sudo service nginx start
+
+# Or use the init.d script (since systemctl is not allowed)
+# sudo /etc/init.d/nginx start
+
+# Create the HTML content with required string
 echo "Holberton School for the win!" | sudo tee /var/www/html/index.nginx-debian.html
 
-# Ensure nginx is running (without using systemctl)
-sudo service nginx start
-# Or use: sudo /etc/init.d/nginx start
+# Set proper permissions for the web root
+sudo chown -R www-data:www-data /var/www/html/
+
+# Ensure Nginx starts on boot
+sudo update-rc.d nginx defaults
+
+# Verify Nginx is running
+sudo service nginx status
