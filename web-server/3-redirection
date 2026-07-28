@@ -1,0 +1,32 @@
+#!/bin/bash
+# Script to configure nginx with a 301 redirect
+
+# Install nginx if not already installed
+sudo apt-get update -y
+sudo apt-get install -y nginx
+
+# Configure the redirect in nginx
+# Create a new server block configuration
+sudo bash -c 'cat > /etc/nginx/sites-available/default << EOF
+server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
+
+    root /var/www/html;
+    index index.html index.htm;
+
+    server_name _;
+
+    location / {
+        try_files \$uri \$uri/ =404;
+    }
+
+    location /redirect_me {
+        return 301 https://www.youtube.com/watch?v=QH2-TGUlwu4;
+    }
+}
+EOF'
+
+# Restart nginx without systemctl
+sudo service nginx restart
+# Or: sudo /etc/init.d/nginx restart

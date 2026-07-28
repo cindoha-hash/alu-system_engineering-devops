@@ -1,0 +1,13 @@
+#!/bin/bash
+# Script to install and configure nginx web server
+
+# Update package list and install nginx with -y flag
+sudo apt-get update -y
+sudo apt-get install -y nginx
+
+# Create the HTML content with "Holberton School"
+echo "Holberton School for the win!" | sudo tee /var/www/html/index.nginx-debian.html
+
+# Ensure nginx is running (without using systemctl)
+sudo service nginx start
+# Or use: sudo /etc/init.d/nginx start
