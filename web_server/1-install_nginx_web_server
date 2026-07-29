@@ -4,23 +4,36 @@
 # Update package lists
 sudo apt-get update -y
 
-# Install Nginx web server (includes -y to auto-confirm)
+# Install Nginx web server
 sudo apt-get install -y nginx
 
-# Ensure Nginx is running
-sudo service nginx start
-
-# Or use the init.d script (since systemctl is not allowed)
-# sudo /etc/init.d/nginx start
-
 # Create the HTML content with required string
-echo "Holberton School for the win!" | sudo tee /var/www/html/index.nginx-debian.html
+sudo mkdir -p /var/www/html
+echo "Holberton School for the win!" | sudo tee /var/www/html/index.html
 
-# Set proper permissions for the web root
+# Configure Nginx to use the correct root directory
+sudo bash -c 'cat > /etc/nginx/sites-available/default << EOF
+server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
+
+    root /var/www/html;
+    index index.html index.htm;
+
+    server_name _;
+
+    location / {
+        try_files \$uri \$uri/ =404;
+    }
+}
+EOF'
+
+# Set proper permissions
 sudo chown -R www-data:www-data /var/www/html/
+sudo chmod -R 755 /var/www/html/
 
-# Ensure Nginx starts on boot
-sudo update-rc.d nginx defaults
+# Test configuration
+sudo nginx -t
 
-# Verify Nginx is running
-sudo service nginx status
+# Restart Nginx
+sudo service nginx restart

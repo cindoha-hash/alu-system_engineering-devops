@@ -1,12 +1,15 @@
-#!/bin/bash
-# Script to configure nginx with a 301 redirect
+#!/usr/bin/env bash
+# This script configures Nginx with a 301 redirect from /redirect_me to YouTube
 
-# Install nginx if not already installed
+# Update and install Nginx if not already installed
 sudo apt-get update -y
 sudo apt-get install -y nginx
 
-# Configure the redirect in nginx
-# Create a new server block configuration
+# Ensure the web root exists
+sudo mkdir -p /var/www/html
+echo "Holberton School for the win!" | sudo tee /var/www/html/index.html
+
+# Configure Nginx with redirect
 sudo bash -c 'cat > /etc/nginx/sites-available/default << EOF
 server {
     listen 80 default_server;
@@ -27,6 +30,10 @@ server {
 }
 EOF'
 
-# Restart nginx without systemctl
+# Set proper permissions
+sudo chown -R www-data:www-data /var/www/html/
+sudo chmod -R 755 /var/www/html/
+
+# Test and restart
+sudo nginx -t
 sudo service nginx restart
-# Or: sudo /etc/init.d/nginx restart

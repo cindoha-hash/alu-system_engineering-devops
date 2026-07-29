@@ -1,5 +1,5 @@
-#!/bin/bash
-# Script to transfer a file to a server using scp
+#!/usr/bin/env bash
+# This script transfers a file to a server using scp with strict host key checking disabled
 
 # Check if exactly 4 parameters are passed
 if [ $# -ne 4 ]; then
