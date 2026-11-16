@@ -1,4 +1,4 @@
-!/usr/bin/env bash
+#!/usr/bin/env bash
 # This script installs and configures Nginx web server on a new Ubuntu machine
 
 # Update package lists
