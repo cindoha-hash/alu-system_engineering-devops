@@ -1,0 +1,39 @@
+!/usr/bin/env bash
+# This script installs and configures Nginx web server on a new Ubuntu machine
+
+# Update package lists
+sudo apt-get update -y
+
+# Install Nginx web server
+sudo apt-get install -y nginx
+
+# Create the HTML content with required string
+sudo mkdir -p /var/www/html
+echo "Holberton School for the win!" | sudo tee /var/www/html/index.html
+
+# Configure Nginx to use the correct root directory
+sudo bash -c 'cat > /etc/nginx/sites-available/default << EOF
+server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
+
+    root /var/www/html;
+    index index.html index.htm;
+
+    server_name _;
+
+    location / {
+        try_files \$uri \$uri/ =404;
+    }
+}
+EOF'
+
+# Set proper permissions
+sudo chown -R www-data:www-data /var/www/html/
+sudo chmod -R 755 /var/www/html/
+
+# Test configuration
+sudo nginx -t
+
+# Restart Nginx
+sudo service nginx restart
